@@ -1,7 +1,10 @@
 const { MongoClient } = require("mongodb");
-
+require('dotenv').config();
 // The uri string must be the connection string for the database (obtained on Atlas).
-const uri = "mongodb+srv://<user>:<password>@ckmdb.5oxvqja.mongodb.net/?retryWrites=true&w=majority";
+const user = process.env.user;
+const paswd = process.env.paswd;
+const uri = "mongodb+srv://" + user +":"+ paswd +"@cluster1.t3oanmq.mongodb.net/?appName=Cluster1";
+
 
 // --- This is the standard stuff to get it to work on the browser
 const express = require('express');
@@ -47,12 +50,12 @@ const client = new MongoClient(uri);
 
 async function run() {
   try {
-    const database = client.db('ckmdb');
-    const parts = database.collection('cmps415');
+    const database = client.db('ClassExample');
+    const parts = database.collection('Users');
 
     // Here we make a search query where the key is hardwired to 'partID' 
     // and the value is picked from the input parameter that comes in the route
-     const query = { partID: req.params.item };
+     const query = { name: req.params.item };
      console.log("Looking for: " + query);
 
     const part = await parts.findOne(query);
@@ -78,8 +81,8 @@ const client = new MongoClient(uri);
 
 async function run() {
   try {
-    const database = client.db('ckmdb');
-    const where2look = database.collection('cmps415');
+    const database = client.db('ClassExample');
+    const where2look = database.collection('Users');
 
     // Here we will make a query object using the parameters provided with the route
     // as they key:value pairs
@@ -124,8 +127,8 @@ console.log("Adding: " + doc2insert);
 
 async function run() {
   try {
-    const database = client.db('ckmdb');
-    const where2put = database.collection('cmps415');
+    const database = client.db('ClassExample');
+    const where2put = database.collection('Users');
 
     const doit = await where2put.insertOne(doc2insert);
     console.log(doit);
